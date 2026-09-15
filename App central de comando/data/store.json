@@ -22,16 +22,7 @@
         {
           "id": "livro",
           "name": "Livro",
-          "boards": [
-            {
-              "id": "tear-construcao",
-              "title": "Método T.E.A.R. — construção do conteúdo",
-              "status": "andamento",
-              "progress": 40,
-              "next": "Fazer um resumo do que já foi construído no método e no Livro 1; planejar o conteúdo do Livro 2.",
-              "notes": "Livro 1 já está em boa forma. O segundo volume ainda está sendo estruturado com cuidado."
-            }
-          ]
+          "boards": []
         }
       ]
     },
