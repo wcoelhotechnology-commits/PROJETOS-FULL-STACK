@@ -1,0 +1,840 @@
+/* =============================================================================
+   ASSETFLOW — FRONTEND
+   Autor: Wellington Coelho
+   Arquivo: estilo.css
+
+   Propósito:
+       Estilo visual completo do sistema: tema escuro com detalhes
+       em verde neon, transmitindo tecnologia e controle — a mesma
+       identidade usada no projeto original, agora com um nome de
+       produto neutro (não mais amarrado ao case "Wayne").
+   ============================================================================= */
+
+
+/* =============================================================================
+   1. VARIÁVEIS DE COR E ESPAÇAMENTO
+   ============================================================================= */
+
+:root {
+
+    --cor-fundo: #050a08;
+    --cor-fundo-painel: #0c1512;
+    --cor-fundo-campo: #0a1310;
+
+    --cor-primaria: #39ff88;
+    --cor-primaria-escura: #1fae5c;
+
+    --cor-texto: #e6fff2;
+    --cor-texto-secundario: #7fa896;
+
+    --cor-borda: #1c3229;
+
+    --cor-erro: #ff5d5d;
+    --cor-sucesso: #39ff88;
+    --cor-alerta: #ffb84d;
+
+    --cor-uso: #ffd23f;
+    --cor-manutencao: #ff9a3c;
+    --cor-inativo: #ff5d5d;
+
+    --raio-padrao: 10px;
+    --sombra-neon: 0 0 18px rgba(57, 255, 136, 0.25);
+
+    --fonte-base: 'Courier New', Consolas, monospace;
+}
+
+
+/* =============================================================================
+   2. RESET BÁSICO
+   ============================================================================= */
+
+* {
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+html,
+body {
+
+    height: 100%;
+}
+
+
+body {
+
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    font-family: var(--fonte-base);
+    line-height: 1.5;
+    overflow-x: hidden;
+    position: relative;
+}
+
+
+/* =============================================================================
+   3. ACESSIBILIDADE
+   ============================================================================= */
+
+.visualmente-oculto {
+
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+
+.oculto {
+
+    display: none !important;
+}
+
+
+/* =============================================================================
+   4. FUNDO ANIMADO E GRID
+   ============================================================================= */
+
+.bg-animacao {
+
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(57, 255, 136, 0.08),
+            transparent 40%
+        ),
+        radial-gradient(
+            circle at 80% 70%,
+            rgba(31, 174, 92, 0.10),
+            transparent 45%
+        );
+}
+
+
+.grid-padrao {
+
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+
+    background-image:
+        linear-gradient(rgba(57, 255, 136, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(57, 255, 136, 0.04) 1px, transparent 1px);
+
+    background-size: 42px 42px;
+}
+
+
+/* =============================================================================
+   5. CONTAINER PRINCIPAL
+   ============================================================================= */
+
+.container-principal {
+
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px 20px 60px;
+    min-height: 100%;
+}
+
+
+/* =============================================================================
+   6. CABEÇALHO
+   ============================================================================= */
+
+.cabecalho-sistema {
+
+    margin-bottom: 32px;
+}
+
+
+.marca-produto {
+
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+
+.logotipo-marca {
+
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: linear-gradient(160deg, #0c1512, #0a1310);
+    border: 1px solid var(--cor-primaria-escura);
+    border-radius: var(--raio-padrao);
+
+    color: var(--cor-primaria);
+    font-weight: bold;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+
+    box-shadow: var(--sombra-neon);
+}
+
+
+.nome-marca {
+
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    color: var(--cor-primaria);
+    text-shadow: 0 0 12px rgba(57, 255, 136, 0.35);
+}
+
+
+.sub-marca {
+
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    color: var(--cor-texto-secundario);
+    margin-top: 2px;
+}
+
+
+.linha-luminosa {
+
+    height: 1px;
+    margin-top: 20px;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--cor-primaria-escura),
+        transparent
+    );
+}
+
+
+/* =============================================================================
+   7. PAINÉIS
+   ============================================================================= */
+
+.painel-central,
+.painel-sistema {
+
+    background: var(--cor-fundo-painel);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio-padrao);
+    padding: 32px 28px;
+}
+
+
+.painel-login {
+
+    max-width: 420px;
+    margin: 40px auto 0;
+    text-align: center;
+}
+
+
+.icone-painel {
+
+    font-size: 2.2rem;
+    margin-bottom: 8px;
+}
+
+
+.titulo-painel {
+
+    font-size: 1.15rem;
+    letter-spacing: 2px;
+    color: var(--cor-primaria);
+    margin-bottom: 4px;
+}
+
+
+.subtitulo-painel {
+
+    font-size: 0.78rem;
+    color: var(--cor-texto-secundario);
+    margin-bottom: 24px;
+}
+
+
+/* =============================================================================
+   8. FORMULÁRIOS
+   ============================================================================= */
+
+.formulario {
+
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    text-align: left;
+}
+
+
+.grade-campos {
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+
+@media (max-width: 620px) {
+
+    .grade-campos {
+
+        grid-template-columns: 1fr;
+    }
+}
+
+
+.grupo-campo {
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+
+.etiqueta-campo {
+
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    color: var(--cor-texto-secundario);
+}
+
+
+.entrada-dados {
+
+    background: var(--cor-fundo-campo);
+    border: 1px solid var(--cor-borda);
+    border-radius: 6px;
+    color: var(--cor-texto);
+    padding: 11px 12px;
+    font-family: inherit;
+    font-size: 0.9rem;
+
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+.entrada-dados:focus {
+
+    outline: none;
+    border-color: var(--cor-primaria-escura);
+    box-shadow: 0 0 0 3px rgba(57, 255, 136, 0.12);
+}
+
+
+.campo-texto {
+
+    min-height: 84px;
+    resize: vertical;
+}
+
+
+select.entrada-dados {
+
+    cursor: pointer;
+}
+
+
+/* =============================================================================
+   9. BOTÕES
+   ============================================================================= */
+
+.botao-acao {
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+
+    font-family: inherit;
+    font-size: 0.82rem;
+    letter-spacing: 1px;
+
+    padding: 12px 20px;
+
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+
+.botao-acao:hover {
+
+    transform: translateY(-1px);
+}
+
+
+.botao-acao:active {
+
+    transform: translateY(0);
+}
+
+
+.botao-principal {
+
+    background: var(--cor-primaria);
+    color: #041006;
+    font-weight: bold;
+
+    box-shadow: var(--sombra-neon);
+}
+
+
+.botao-secundario {
+
+    background: transparent;
+    color: var(--cor-texto-secundario);
+    border: 1px solid var(--cor-borda);
+}
+
+
+.botao-sair {
+
+    background: transparent;
+    color: var(--cor-erro);
+    border: 1px solid rgba(255, 93, 93, 0.4);
+}
+
+
+.botao-mini {
+
+    padding: 7px 12px;
+    font-size: 0.72rem;
+}
+
+
+.botao-mini-perigo {
+
+    background: rgba(255, 93, 93, 0.12);
+    color: var(--cor-erro);
+    border: 1px solid rgba(255, 93, 93, 0.35);
+}
+
+
+.grupo-botoes {
+
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+
+/* =============================================================================
+   10. MENSAGENS
+   ============================================================================= */
+
+.caixa-mensagem {
+
+    min-height: 20px;
+    margin-top: 16px;
+    font-size: 0.82rem;
+}
+
+
+.caixa-mensagem.sucesso {
+
+    color: var(--cor-sucesso);
+}
+
+
+.caixa-mensagem.erro {
+
+    color: var(--cor-erro);
+}
+
+
+.aviso-seguranca {
+
+    margin-top: 24px;
+    font-size: 0.68rem;
+    color: var(--cor-texto-secundario);
+}
+
+
+.indicador-seguro {
+
+    color: var(--cor-primaria);
+}
+
+
+/* =============================================================================
+   11. BARRA DO USUÁRIO
+   ============================================================================= */
+
+.barra-estado {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+
+.perfil-usuario {
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+
+.icone-perfil-mini {
+
+    font-size: 1.6rem;
+}
+
+
+.nome-usuario-logado {
+
+    font-size: 1rem;
+}
+
+
+.nivel-acesso {
+
+    font-size: 0.72rem;
+    color: var(--cor-texto-secundario);
+}
+
+
+/* =============================================================================
+   12. NAVEGAÇÃO
+   ============================================================================= */
+
+.navegacao-principal {
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 28px;
+}
+
+
+.botao-nav {
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    background: var(--cor-fundo-campo);
+    border: 1px solid var(--cor-borda);
+    border-radius: 6px;
+    color: var(--cor-texto-secundario);
+
+    padding: 10px 16px;
+    font-family: inherit;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+
+    transition: all 0.15s ease;
+}
+
+
+.botao-nav:hover {
+
+    color: var(--cor-texto);
+    border-color: var(--cor-primaria-escura);
+}
+
+
+.botao-nav.ativo {
+
+    background: rgba(57, 255, 136, 0.1);
+    border-color: var(--cor-primaria);
+    color: var(--cor-primaria);
+}
+
+
+/* =============================================================================
+   13. PÁGINAS DE CONTEÚDO
+   ============================================================================= */
+
+.titulo-secao {
+
+    font-size: 0.95rem;
+    letter-spacing: 1.5px;
+    color: var(--cor-primaria);
+    margin-bottom: 18px;
+}
+
+
+.titulo-secao-espacado {
+
+    margin-top: 36px;
+}
+
+
+/* =============================================================================
+   14. FILTROS
+   ============================================================================= */
+
+.barra-filtros {
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+
+.campo-filtro {
+
+    flex: 1;
+    min-width: 200px;
+
+    background: var(--cor-fundo-campo);
+    border: 1px solid var(--cor-borda);
+    border-radius: 6px;
+    color: var(--cor-texto);
+
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 0.82rem;
+}
+
+
+/* =============================================================================
+   15. LISTA DE ATIVOS / USUÁRIOS
+   ============================================================================= */
+
+.grade-recursos {
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+
+.item-recurso {
+
+    background: var(--cor-fundo-campo);
+    border: 1px solid var(--cor-borda);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 0.85rem;
+}
+
+
+.mensagem-vazia {
+
+    color: var(--cor-texto-secundario);
+    font-size: 0.82rem;
+    padding: 12px 0;
+}
+
+
+.linha-acoes-item {
+
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+
+/* -------------------------------------------------------------------------
+   CORES DE STATUS
+   ------------------------------------------------------------------------- */
+
+.status-disponível {
+
+    color: var(--cor-primaria);
+}
+
+
+.status-em-uso {
+
+    color: var(--cor-uso);
+}
+
+
+.status-em-manutenção {
+
+    color: var(--cor-manutencao);
+}
+
+
+.status-inativo {
+
+    color: var(--cor-inativo);
+}
+
+
+/* -------------------------------------------------------------------------
+   ETIQUETAS DE NÍVEL (página de usuários)
+   ------------------------------------------------------------------------- */
+
+.etiqueta-nivel {
+
+    display: inline-block;
+    margin-left: 8px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.68rem;
+    letter-spacing: 0.5px;
+}
+
+
+.etiqueta-nivel-1 {
+
+    background: rgba(127, 168, 150, 0.15);
+    color: var(--cor-texto-secundario);
+}
+
+
+.etiqueta-nivel-2 {
+
+    background: rgba(255, 210, 63, 0.12);
+    color: var(--cor-uso);
+}
+
+
+.etiqueta-nivel-3 {
+
+    background: rgba(57, 255, 136, 0.12);
+    color: var(--cor-primaria);
+}
+
+
+/* =============================================================================
+   16. PAINEL GERAL
+   ============================================================================= */
+
+.grade-painel {
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+}
+
+
+.cartao-dado {
+
+    background: var(--cor-fundo-campo);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio-padrao);
+
+    padding: 20px 14px;
+    text-align: center;
+}
+
+
+.valor-cartao {
+
+    display: block;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--cor-primaria);
+}
+
+
+.cartao-uso .valor-cartao {
+
+    color: var(--cor-uso);
+}
+
+
+.cartao-manutencao .valor-cartao {
+
+    color: var(--cor-manutencao);
+}
+
+
+.cartao-inativo .valor-cartao {
+
+    color: var(--cor-inativo);
+}
+
+
+.rotulo-cartao {
+
+    display: block;
+    margin-top: 6px;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    color: var(--cor-texto-secundario);
+}
+
+
+/* =============================================================================
+   17. MODAL DE EDIÇÃO
+   ============================================================================= */
+
+.sobreposicao-modal {
+
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(2, 6, 4, 0.75);
+    backdrop-filter: blur(2px);
+
+    padding: 20px;
+}
+
+
+.caixa-modal {
+
+    width: 100%;
+    max-width: 560px;
+    max-height: 90vh;
+    overflow-y: auto;
+
+    background: var(--cor-fundo-painel);
+    border: 1px solid var(--cor-primaria-escura);
+    border-radius: var(--raio-padrao);
+    box-shadow: var(--sombra-neon);
+
+    padding: 28px;
+}
+
+
+/* =============================================================================
+   18. RODAPÉ
+   ============================================================================= */
+
+.rodape-sistema {
+
+    margin-top: 48px;
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--cor-texto-secundario);
+}
+
+
+.rodape-sistema .linha-luminosa {
+
+    margin-bottom: 20px;
+}
+
+
+.assinatura-autor {
+
+    margin-top: 4px;
+    opacity: 0.7;
+}

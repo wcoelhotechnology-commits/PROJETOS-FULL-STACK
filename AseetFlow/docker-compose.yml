@@ -1,0 +1,38 @@
+# =============================================================================
+# ASSETFLOW — DOCKER COMPOSE
+#
+# Sobe a aplicação inteira com um único comando:
+#
+#     docker compose up --build
+#
+# Requer um arquivo ".env" na raiz do projeto (ver .env.example).
+# =============================================================================
+
+services:
+
+  assetflow:
+
+    build: .
+
+    container_name: assetflow
+
+    ports:
+      # host:container — acesse http://localhost:5000
+      - "5000:5000"
+
+    env_file:
+      - .env
+
+    environment:
+      # Dentro do container o servidor precisa escutar em todas as
+      # interfaces, não apenas em 127.0.0.1, senão a porta publicada
+      # não alcança a aplicação.
+      APP_HOST: 0.0.0.0
+
+    volumes:
+      # Mantém o banco de dados fora do container, para não perder
+      # os dados quando ele for recriado.
+      - assetflow_dados:/app/backend/instance
+
+volumes:
+  assetflow_dados:

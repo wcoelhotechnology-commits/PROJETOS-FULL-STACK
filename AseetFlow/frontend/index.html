@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        http-equiv="X-UA-Compatible"
+        content="IE=edge"
+    >
+
+    <meta
+        name="description"
+        content="AssetFlow — Sistema de Gestão de Ativos"
+    >
+
+    <meta
+        name="author"
+        content="Wellington Coelho"
+    >
+
+    <link
+        rel="icon"
+        type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23050a08'/><text x='50' y='68' font-size='54' font-family='Arial' font-weight='bold' fill='%2339ff88' text-anchor='middle'>A</text></svg>"
+    >
+
+    <title>
+        ASSETFLOW | Sistema de Gestão de Ativos
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="css/estilo.css"
+    >
+</head>
+
+
+<body>
+
+    <!-- ================================================================
+         ELEMENTOS VISUAIS DE FUNDO
+         ================================================================ -->
+
+    <div
+        class="bg-animacao"
+        aria-hidden="true"
+    ></div>
+
+    <div
+        class="grid-padrao"
+        aria-hidden="true"
+    ></div>
+
+
+    <!-- ================================================================
+         CONTAINER PRINCIPAL
+         ================================================================ -->
+
+    <div class="container-principal">
+
+
+        <!-- ============================================================
+             CABEÇALHO
+             ============================================================ -->
+
+        <header class="cabecalho-sistema">
+
+            <div class="marca-produto">
+
+                <div
+                    class="logotipo-marca"
+                    aria-hidden="true"
+                >
+                    AF
+                </div>
+
+                <div class="texto-marca">
+
+                    <h1 class="nome-marca">
+                        ASSETFLOW
+                    </h1>
+
+                    <p class="sub-marca">
+                        GESTÃO DE ATIVOS CORPORATIVOS · v1.0.0
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div
+                class="linha-luminosa"
+                aria-hidden="true"
+            ></div>
+
+        </header>
+
+
+        <!-- ============================================================
+             ÁREA DE LOGIN
+             ============================================================ -->
+
+        <main
+            id="area-login"
+            class="painel-central painel-login"
+        >
+
+            <div
+                class="icone-painel"
+                aria-hidden="true"
+            >
+                🔐
+            </div>
+
+            <h2 class="titulo-painel">
+                ACESSO RESTRITO
+            </h2>
+
+            <p class="subtitulo-painel">
+                Autenticação de Colaborador Autorizado
+            </p>
+
+
+            <!-- FORMULÁRIO DE LOGIN -->
+
+            <form
+                id="form-login"
+                class="formulario"
+                autocomplete="on"
+                novalidate
+            >
+
+                <!-- E-MAIL -->
+
+                <div class="grupo-campo">
+
+                    <label
+                        for="email"
+                        class="etiqueta-campo"
+                    >
+                        ENDEREÇO DE E-MAIL
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        class="entrada-dados"
+                        placeholder="usuario@suaempresa.com"
+                        autocomplete="username"
+                        maxlength="120"
+                        required
+                    >
+
+                    <span
+                        class="borda-foco"
+                        aria-hidden="true"
+                    ></span>
+
+                </div>
+
+
+                <!-- SENHA -->
+
+                <div class="grupo-campo">
+
+                    <label
+                        for="senha"
+                        class="etiqueta-campo"
+                    >
+                        SENHA DE ACESSO
+                    </label>
+
+                    <input
+                        type="password"
+                        id="senha"
+                        name="senha"
+                        class="entrada-dados"
+                        placeholder="••••••••"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <span
+                        class="borda-foco"
+                        aria-hidden="true"
+                    ></span>
+
+                </div>
+
+
+                <!-- BOTÃO LOGIN -->
+
+                <button
+                    type="submit"
+                    class="botao-acao botao-principal"
+                >
+
+                    <span class="texto-botao">
+                        AUTENTICAR
+                    </span>
+
+                    <span
+                        class="icone-botao"
+                        aria-hidden="true"
+                    >
+                        →
+                    </span>
+
+                </button>
+
+            </form>
+
+
+            <!-- MENSAGENS DO LOGIN -->
+
+            <div
+                id="caixa-mensagem"
+                class="caixa-mensagem"
+                role="status"
+                aria-live="polite"
+            ></div>
+
+
+            <!-- AVISO -->
+
+            <p class="aviso-seguranca">
+
+                <span class="indicador-seguro">
+                    🔒 CONEXÃO SEGURA
+                </span>
+
+                · Sistema de acesso restrito a usuários autorizados
+
+            </p>
+
+        </main>
+
+
+        <!-- ============================================================
+             ÁREA DO SISTEMA
+             Inicialmente oculta.
+             sessao.js exibe somente após validação da sessão Flask.
+             ============================================================ -->
+
+        <main
+            id="area-sistema"
+            class="painel-sistema oculto"
+        >
+
+
+            <!-- ========================================================
+                 BARRA DO USUÁRIO
+                 ======================================================== -->
+
+            <section class="barra-estado">
+
+                <div class="perfil-usuario">
+
+                    <span
+                        class="icone-perfil-mini"
+                        aria-hidden="true"
+                    >
+                        👤
+                    </span>
+
+
+                    <div class="dados-usuario">
+
+                        <h2 class="nome-usuario-logado">
+
+                            Olá,
+
+                            <span id="nome-usuario">
+                                —
+                            </span>
+
+                        </h2>
+
+
+                        <p class="nivel-acesso">
+
+                            Nível de Acesso:
+
+                            <span id="nivel-usuario">
+                                —
+                            </span>
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    id="botao-sair"
+                    type="button"
+                    class="botao-acao botao-sair"
+                >
+
+                    <span aria-hidden="true">
+                        🚪
+                    </span>
+
+                    ENCERRAR SESSÃO
+
+                </button>
+
+            </section>
+
+
+            <!-- ========================================================
+                 NAVEGAÇÃO
+                 ======================================================== -->
+
+            <nav
+                class="navegacao-principal"
+                aria-label="Navegação principal"
+            >
+
+                <!-- INVENTÁRIO -->
+
+                <button
+                    type="button"
+                    class="botao-nav ativo"
+                    data-pagina="inventario"
+                >
+
+                    <span
+                        class="icone-nav"
+                        aria-hidden="true"
+                    >
+                        📦
+                    </span>
+
+                    INVENTÁRIO
+
+                </button>
+
+
+                <!-- CADASTRO
+                     ui-permissoes.js oculta este botão para colaborador nível 1 -->
+
+                <button
+                    type="button"
+                    class="botao-nav"
+                    data-pagina="cadastro"
+                >
+
+                    <span
+                        class="icone-nav"
+                        aria-hidden="true"
+                    >
+                        ➕
+                    </span>
+
+                    NOVO ATIVO
+
+                </button>
+
+
+                <!-- USUÁRIOS
+                     ui-permissoes.js oculta este botão para quem não é administrador -->
+
+                <button
+                    type="button"
+                    class="botao-nav"
+                    data-pagina="usuarios"
+                >
+
+                    <span
+                        class="icone-nav"
+                        aria-hidden="true"
+                    >
+                        👥
+                    </span>
+
+                    USUÁRIOS
+
+                </button>
+
+
+                <!-- PAINEL -->
+
+                <button
+                    type="button"
+                    class="botao-nav"
+                    data-pagina="painel"
+                >
+
+                    <span
+                        class="icone-nav"
+                        aria-hidden="true"
+                    >
+                        📊
+                    </span>
+
+                    PAINEL GERAL
+
+                </button>
+
+            </nav>
+
+
+            <!-- ========================================================
+                 PÁGINA 1 — INVENTÁRIO
+                 ======================================================== -->
+
+            <section
+                id="pagina-inventario"
+                class="pagina-conteudo"
+            >
+
+                <h3 class="titulo-secao">
+                    📋 LISTA DE ATIVOS
+                </h3>
+
+
+                <!-- FILTROS -->
+
+                <div class="barra-filtros">
+
+                    <label
+                        for="filtro-status"
+                        class="visualmente-oculto"
+                    >
+                        Filtrar ativos por status
+                    </label>
+
+                    <select
+                        id="filtro-status"
+                        class="campo-filtro"
+                    >
+
+                        <option value="">
+                            Todos os Status
+                        </option>
+
+                        <option value="disponível">
+                            🟢 Disponível
+                        </option>
+
+                        <option value="em uso">
+                            🟡 Em Uso
+                        </option>
+
+                        <option value="em manutenção">
+                            🟠 Em Manutenção
+                        </option>
+
+                        <option value="inativo">
+                            🔴 Inativo
+                        </option>
+
+                    </select>
+
+
+                    <label
+                        for="campo-busca"
+                        class="visualmente-oculto"
+                    >
+                        Buscar ativo
+                    </label>
+
+                    <input
+                        type="search"
+                        id="campo-busca"
+                        class="campo-filtro"
+                        placeholder="🔍 Buscar por nome, tipo ou localização..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <!-- LISTA -->
+
+                <div
+                    id="lista-recursos"
+                    class="grade-recursos"
+                    aria-live="polite"
+                >
+
+                    <p class="mensagem-vazia">
+                        Carregando base de dados...
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- ========================================================
+                 PÁGINA 2 — CADASTRO DE ATIVO
+                 Gerente ou Administrador.
+                 ======================================================== -->
+
+            <section
+                id="pagina-cadastro"
+                class="pagina-conteudo oculto"
+            >
+
+                <h3 class="titulo-secao">
+                    ➕ CADASTRAR NOVO ATIVO
+                </h3>
+
+
+                <form
+                    id="formulario-cadastro"
+                    class="formulario"
+                >
+
+
+                    <!-- ====================================================
+                         NOME + TIPO
+                         ==================================================== -->
+
+                    <div class="grade-campos">
+
+
+                        <!-- NOME -->
+
+                        <div class="grupo-campo">
+
+                            <label
+                                for="rec-nome"
+                                class="etiqueta-campo"
+                            >
+                                NOME DO ATIVO *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="rec-nome"
+                                name="nome"
+                                class="entrada-dados"
+                                placeholder="Ex: Notebook Corporativo"
+                                minlength="2"
+                                maxlength="150"
+                                autocomplete="off"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- TIPO -->
+
+                        <div class="grupo-campo">
+
+                            <label
+                                for="rec-tipo"
+                                class="etiqueta-campo"
+                            >
+                                TIPO *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="rec-tipo"
+                                name="tipo"
+                                class="entrada-dados"
+                                placeholder="Ex: Equipamento de TI"
+                                minlength="2"
+                                maxlength="50"
+                                autocomplete="off"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ====================================================
+                         DESCRIÇÃO
+                         ==================================================== -->
+
+                    <div class="grupo-campo">
+
+                        <label
+                            for="rec-descricao"
+                            class="etiqueta-campo"
+                        >
+                            DESCRIÇÃO / ESPECIFICAÇÕES
+                        </label>
+
+                        <textarea
+                            id="rec-descricao"
+                            name="descricao"
+                            class="entrada-dados campo-texto"
+                            placeholder="Detalhes, observações, especificações técnicas..."
+                        ></textarea>
+
+                    </div>
+
+
+                    <!-- ====================================================
+                         LOCALIZAÇÃO + STATUS
+                         ==================================================== -->
+
+                    <div class="grade-campos">
+
+
+                        <!-- LOCALIZAÇÃO -->
+
+                        <div class="grupo-campo">
+
+                            <label
+                                for="rec-localizacao"
+                                class="etiqueta-campo"
+                            >
+                                LOCALIZAÇÃO *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="rec-localizacao"
+                                name="localizacao"
+                                class="entrada-dados"
+                                placeholder="Ex: Matriz · Andar 3 · Sala 302"
+                                minlength="2"
+                                maxlength="100"
+                                autocomplete="off"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- STATUS -->
+
+                        <div class="grupo-campo">
+
+                            <label
+                                for="rec-status"
+                                class="etiqueta-campo"
+                            >
+                                STATUS *
+                            </label>
+
+                            <select
+                                id="rec-status"
+                                name="status"
+                                class="entrada-dados"
+                                required
+                            >
+
+                                <option value="disponível">
+                                    🟢 Disponível
+                                </option>
+
+                                <option value="em uso">
+                                    🟡 Em Uso
+                                </option>
+
+                                <option value="em manutenção">
+                                    🟠 Em Manutenção
+                                </option>
+
+                                <option value="inativo">
+                                    🔴 Inativo
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ====================================================
+                         RESPONSÁVEL
+                         Preenchido dinamicamente por usuarios.js
+                         com a lista de usuários cadastrados.
+                         ==================================================== -->
+
+                    <div class="grupo-campo">
+
+                        <label
+                            for="rec-responsavel"
+                            class="etiqueta-campo"
+                        >
+                            RESPONSÁVEL (OPCIONAL)
+                        </label>
+
+                        <select
+                            id="rec-responsavel"
+                            name="responsavel_id"
+                            class="entrada-dados"
+                        >
+
+                            <option value="">
+                                Nenhum responsável definido
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ====================================================
+                         BOTÕES
+                         ==================================================== -->
+
+                    <div class="grupo-botoes">
+
+                        <button
+                            type="reset"
+                            class="botao-acao botao-secundario"
+                        >
+                            LIMPAR
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="botao-acao botao-principal"
+                        >
+                            SALVAR ATIVO
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+
+            <!-- ========================================================
+                 PÁGINA 3 — GESTÃO DE USUÁRIOS
+                 Somente Administrador.
+                 ======================================================== -->
+
+            <section
+                id="pagina-usuarios"
+                class="pagina-conteudo oculto"
+            >
+
+                <h3 class="titulo-secao">
+                    👥 USUÁRIOS DO SISTEMA
+                </h3>
+
+
+                <!-- LISTA DE USUÁRIOS -->
+
+                <div
+                    id="lista-usuarios"
+                    class="grade-recursos"
+                    aria-live="polite"
+                >
+
+                    <p class="mensagem-vazia">
+                        Carregando usuários...
+                    </p>
+
+                </div>
+
+
+                <h3 class="titulo-secao titulo-secao-espacado">
+                    ➕ CADASTRAR NOVO USUÁRIO
+                </h3>
+
+
+                <form
+                    id="formulario-usuario"
+                    class="formulario"
+                >
+
+                    <div class="grade-campos">
+
+                        <div class="grupo-campo">
+
+                            <label
+                                for="usr-nome"
+                                class="etiqueta-campo"
+                            >
+                                NOME *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="usr-nome"
+                                name="nome"
+                                class="entrada-dados"
+                                placeholder="Nome completo"
+                                maxlength="100"
+                                autocomplete="off"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="grupo-campo">
+
+                            <label
+                                for="usr-email"
+                                class="etiqueta-campo"
+                            >
+                                E-MAIL *
+                            </label>
+
+                            <input
+                                type="email"
+                                id="usr-email"
+                                name="email"
+                                class="entrada-dados"
+                                placeholder="usuario@suaempresa.com"
+                                maxlength="120"
+                                autocomplete="off"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <div class="grade-campos">
+
+                        <div class="grupo-campo">
+
+                            <label
+                                for="usr-senha"
+                                class="etiqueta-campo"
+                            >
+                                SENHA PROVISÓRIA *
+                            </label>
+
+                            <input
+                                type="password"
+                                id="usr-senha"
+                                name="senha"
+                                class="entrada-dados"
+                                placeholder="Mínimo de 8 caracteres"
+                                minlength="8"
+                                autocomplete="off"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="grupo-campo">
+
+                            <label
+                                for="usr-nivel"
+                                class="etiqueta-campo"
+                            >
+                                NÍVEL DE ACESSO *
+                            </label>
+
+                            <select
+                                id="usr-nivel"
+                                name="nivel_permissao"
+                                class="entrada-dados"
+                                required
+                            >
+
+                                <option value="1">
+                                    Colaborador
+                                </option>
+
+                                <option value="2">
+                                    Gerente
+                                </option>
+
+                                <option value="3">
+                                    Administrador
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="grupo-botoes">
+
+                        <button
+                            type="submit"
+                            class="botao-acao botao-principal"
+                        >
+                            CADASTRAR USUÁRIO
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+
+            <!-- ========================================================
+                 PÁGINA 4 — PAINEL
+                 ======================================================== -->
+
+            <section
+                id="pagina-painel"
+                class="pagina-conteudo oculto"
+            >
+
+                <h3 class="titulo-secao">
+                    📊 VISÃO GERAL DO SISTEMA
+                </h3>
+
+
+                <div class="grade-painel">
+
+
+                    <!-- TOTAL -->
+
+                    <div class="cartao-dado">
+
+                        <span
+                            class="valor-cartao"
+                            id="total-geral"
+                        >
+                            —
+                        </span>
+
+                        <span class="rotulo-cartao">
+                            Total de Ativos
+                        </span>
+
+                    </div>
+
+
+                    <!-- DISPONÍVEIS -->
+
+                    <div
+                        class="cartao-dado cartao-disponivel"
+                    >
+
+                        <span
+                            class="valor-cartao"
+                            id="total-disponiveis"
+                        >
+                            —
+                        </span>
+
+                        <span class="rotulo-cartao">
+                            Disponíveis
+                        </span>
+
+                    </div>
+
+
+                    <!-- EM USO -->
+
+                    <div
+                        class="cartao-dado cartao-uso"
+                    >
+
+                        <span
+                            class="valor-cartao"
+                            id="total-em-uso"
+                        >
+                            —
+                        </span>
+
+                        <span class="rotulo-cartao">
+                            Em Uso
+                        </span>
+
+                    </div>
+
+
+                    <!-- MANUTENÇÃO -->
+
+                    <div
+                        class="cartao-dado cartao-manutencao"
+                    >
+
+                        <span
+                            class="valor-cartao"
+                            id="total-manutencao"
+                        >
+                            —
+                        </span>
+
+                        <span class="rotulo-cartao">
+                            Em Manutenção
+                        </span>
+
+                    </div>
+
+
+                    <!-- INATIVOS -->
+
+                    <div
+                        class="cartao-dado cartao-inativo"
+                    >
+
+                        <span
+                            class="valor-cartao"
+                            id="total-inativos"
+                        >
+                            —
+                        </span>
+
+                        <span class="rotulo-cartao">
+                            Inativos
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+
+        <!-- ============================================================
+             RODAPÉ
+             ============================================================ -->
+
+        <footer class="rodape-sistema">
+
+            <div
+                class="linha-luminosa"
+                aria-hidden="true"
+            ></div>
+
+            <p>
+                © 2026 AssetFlow.
+                Todos os direitos reservados.
+            </p>
+
+            <p class="assinatura-autor">
+                Desenvolvido por Wellington Coelho
+            </p>
+
+        </footer>
+
+    </div>
+
+
+    <!-- ================================================================
+         MODAL DE EDIÇÃO DE ATIVO
+         Fica fora do container principal para não ser afetado
+         pelo posicionamento do restante da página.
+         Início oculto — modal-edicao.js controla a exibição.
+         ================================================================ -->
+
+    <div
+        id="modal-edicao"
+        class="sobreposicao-modal oculto"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titulo-modal-edicao"
+    >
+
+        <div class="caixa-modal">
+
+            <h3
+                id="titulo-modal-edicao"
+                class="titulo-secao"
+            >
+                ✏️ EDITAR ATIVO
+            </h3>
+
+            <form
+                id="formulario-edicao"
+                class="formulario"
+            >
+
+                <!-- Guarda o ID do ativo sendo editado. -->
+                <input
+                    type="hidden"
+                    id="edicao-id"
+                >
+
+                <div class="grade-campos">
+
+                    <div class="grupo-campo">
+
+                        <label
+                            for="edicao-nome"
+                            class="etiqueta-campo"
+                        >
+                            NOME *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="edicao-nome"
+                            class="entrada-dados"
+                            minlength="2"
+                            maxlength="150"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="grupo-campo">
+
+                        <label
+                            for="edicao-tipo"
+                            class="etiqueta-campo"
+                        >
+                            TIPO *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="edicao-tipo"
+                            class="entrada-dados"
+                            minlength="2"
+                            maxlength="50"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+                <div class="grupo-campo">
+
+                    <label
+                        for="edicao-descricao"
+                        class="etiqueta-campo"
+                    >
+                        DESCRIÇÃO
+                    </label>
+
+                    <textarea
+                        id="edicao-descricao"
+                        class="entrada-dados campo-texto"
+                    ></textarea>
+
+                </div>
+
+                <div class="grade-campos">
+
+                    <div class="grupo-campo">
+
+                        <label
+                            for="edicao-localizacao"
+                            class="etiqueta-campo"
+                        >
+                            LOCALIZAÇÃO *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="edicao-localizacao"
+                            class="entrada-dados"
+                            minlength="2"
+                            maxlength="100"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="grupo-campo">
+
+                        <label
+                            for="edicao-status"
+                            class="etiqueta-campo"
+                        >
+                            STATUS *
+                        </label>
+
+                        <select
+                            id="edicao-status"
+                            class="entrada-dados"
+                            required
+                        >
+
+                            <option value="disponível">🟢 Disponível</option>
+                            <option value="em uso">🟡 Em Uso</option>
+                            <option value="em manutenção">🟠 Em Manutenção</option>
+                            <option value="inativo">🔴 Inativo</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div class="grupo-campo">
+
+                    <label
+                        for="edicao-responsavel"
+                        class="etiqueta-campo"
+                    >
+                        RESPONSÁVEL
+                    </label>
+
+                    <select
+                        id="edicao-responsavel"
+                        class="entrada-dados"
+                    >
+
+                        <option value="">
+                            Nenhum responsável definido
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="grupo-botoes">
+
+                    <button
+                        type="button"
+                        id="botao-cancelar-edicao"
+                        class="botao-acao botao-secundario"
+                    >
+                        CANCELAR
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="botao-acao botao-principal"
+                    >
+                        SALVAR ALTERAÇÕES
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================================
+         JAVASCRIPT
+         Mantido no final para o DOM já existir quando os scripts
+         carregarem.
+
+         Cada arquivo cuida de uma única responsabilidade e é
+         carregado na ordem de dependência: primeiro a configuração
+         e a comunicação com a API, depois cada página, e por
+         último o arquivo que efetivamente inicializa tudo.
+         ================================================================ -->
+
+    <script src="js/config.js"></script>
+    <script src="js/elementos.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/utilidades.js"></script>
+    <script src="js/sessao.js"></script>
+    <script src="js/ui-permissoes.js"></script>
+    <script src="js/navegacao.js"></script>
+    <script src="js/usuarios.js"></script>
+    <script src="js/inventario.js"></script>
+    <script src="js/edicao-recurso.js"></script>
+    <script src="js/cadastro-recurso.js"></script>
+    <script src="js/painel.js"></script>
+    <script src="js/principal.js"></script>
+
+</body>
+
+</html>
