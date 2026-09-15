@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Central de Comando</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand-block">
+          <div class="brand">Central <span>de Comando</span></div>
+          <p class="brand-note">
+            Um painel pensado para acompanhar ideias, projetos e prioridades com clareza no dia a dia.
+          </p>
+        </div>
+
+        <div id="roomsList" class="rooms"></div>
+
+        <button id="addRoomBtn" class="primary-btn small">+ nova sala</button>
+
+        <div class="sidebar-footer">
+          Dados salvos no navegador e sincronizados com o backend quando ele estiver disponível.
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <div id="crumbs" class="crumbs"></div>
+
+          <div class="toolbar">
+            <button id="exportBtn" class="ghost-btn">Exportar JSON</button>
+            <button id="importBtn" class="ghost-btn">Importar JSON</button>
+            <input id="importInput" type="file" accept="application/json" hidden />
+          </div>
+        </header>
+
+        <div id="subroomsRow" class="subrooms"></div>
+        <div id="boardArea" class="board-area"></div>
+      </main>
+    </div>
+
+    <div id="overlay" class="overlay">
+      <div id="modalContent" class="modal" aria-live="polite"></div>
+    </div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

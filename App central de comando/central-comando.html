@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Central de Comando</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+  :root{
+    --bg: #0A0C12;
+    --panel: #11141D;
+    --panel-2: #171B27;
+    --line: #232838;
+    --text: #E8EAF0;
+    --text-dim: #8890A4;
+    --accent: #E8A33D;
+    --accent-dim: #7A5A24;
+    --cyan: #4FD1D9;
+    --violet: #7C6CF0;
+    --danger: #E36767;
+    --ok: #55C48A;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background: radial-gradient(1200px 600px at 15% -10%, #14192B 0%, var(--bg) 60%);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display:flex;
+  }
+  h1,h2,h3, .brand, .room-name, .board-title{ font-family:'Space Grotesk', sans-serif; }
+
+  /* Sidebar */
+  .sidebar{
+    width: 250px;
+    min-width:250px;
+    background: var(--panel);
+    border-right: 1px solid var(--line);
+    padding: 28px 18px;
+    display:flex;
+    flex-direction:column;
+    gap: 26px;
+  }
+  .brand{
+    font-size: 19px;
+    font-weight:700;
+    letter-spacing: 0.2px;
+    color: var(--text);
+  }
+  .brand span{ color:var(--accent); }
+  .rooms{ display:flex; flex-direction:column; gap:6px; }
+  .room-btn{
+    display:flex; align-items:center; gap:10px;
+    padding: 12px 12px;
+    border-radius: 10px;
+    cursor:pointer;
+    color: var(--text-dim);
+    border: 1px solid transparent;
+    transition: background .15s ease, color .15s ease, border-color .15s ease;
+    font-size: 14.5px;
+    font-weight:500;
+  }
+  .room-btn:hover{ background: var(--panel-2); color:var(--text); }
+  .room-btn.active{
+    background: linear-gradient(90deg, rgba(232,163,61,0.14), rgba(232,163,61,0.02));
+    color: var(--text);
+    border-color: var(--accent-dim);
+  }
+  .room-icon{ font-size:17px; }
+  .add-room-btn{
+    margin-top: 4px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px dashed var(--line);
+    color: var(--text-dim);
+    font-size: 13px;
+    cursor: pointer;
+    text-align:center;
+    transition: border-color .15s, color .15s;
+  }
+  .add-room-btn:hover{ border-color: var(--accent); color: var(--accent); }
+
+  .sidebar-footer{
+    margin-top:auto;
+    font-size:11.5px;
+    color: #4A5164;
+    line-height:1.5;
+  }
+
+  /* Main */
+  .main{ flex:1; padding: 34px 42px; overflow-y:auto; max-height:100vh; }
+  .topbar{
+    display:flex; align-items:baseline; justify-content:space-between;
+    margin-bottom: 26px;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .crumbs{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .crumb{
+    font-size: 13px; color: var(--text-dim);
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--panel);
+    border:1px solid var(--line);
+    cursor:pointer;
+  }
+  .crumb.current{ color: var(--text); border-color: var(--accent-dim); }
+  .crumb-sep{ color: #3A4054; font-size:12px; }
+
+  .subrooms{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 30px; }
+  .subroom-tab{
+    padding: 9px 16px;
+    border-radius: 10px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    color: var(--text-dim);
+    font-size: 13.5px;
+    cursor:pointer;
+    transition: all .15s;
+  }
+  .subroom-tab:hover{ color:var(--text); }
+  .subroom-tab.active{
+    background: var(--panel-2);
+    color: var(--text);
+    border-color: var(--violet);
+    box-shadow: 0 0 0 1px rgba(124,108,240,0.15) inset;
+  }
+  .add-sub-tab{
+    padding: 9px 14px;
+    border-radius: 10px;
+    border: 1px dashed var(--line);
+    color: var(--text-dim);
+    font-size: 13px;
+    cursor:pointer;
+  }
+  .add-sub-tab:hover{ border-color: var(--violet); color: var(--violet); }
+
+  .boards-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+  }
+  .board-card{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px;
+    display:flex;
+    flex-direction:column;
+    gap: 12px;
+    cursor:pointer;
+    transition: border-color .15s, transform .1s;
+  }
+  .board-card:hover{ border-color: var(--accent-dim); }
+  .board-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+  .board-title{ font-size:15.5px; font-weight:600; line-height:1.35; }
+  .status-chip{
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    white-space:nowrap;
+    font-weight:600;
+  }
+  .status-ideia{ background: rgba(79,209,217,0.12); color: var(--cyan); }
+  .status-andamento{ background: rgba(232,163,61,0.14); color: var(--accent); }
+  .status-travado{ background: rgba(227,103,103,0.13); color: var(--danger); }
+  .status-pronto{ background: rgba(85,196,138,0.14); color: var(--ok); }
+
+  .progress-track{
+    height:6px; background: var(--panel-2); border-radius:99px; overflow:hidden;
+  }
+  .progress-fill{ height:100%; background: linear-gradient(90deg, var(--violet), var(--accent)); }
+  .progress-label{ font-size:11.5px; color: var(--text-dim); }
+
+  .next-step{
+    font-size: 12.5px;
+    color: var(--text-dim);
+    border-top: 1px solid var(--line);
+    padding-top: 10px;
+    line-height:1.5;
+  }
+  .next-step b{ color: var(--text); font-weight:600; }
+
+  .add-board-card{
+    border: 1px dashed var(--line);
+    border-radius:14px;
+    display:flex; align-items:center; justify-content:center;
+    color: var(--text-dim);
+    font-size:14px;
+    min-height: 130px;
+    cursor:pointer;
+  }
+  .add-board-card:hover{ border-color: var(--accent); color: var(--accent); }
+
+  .empty-state{
+    color: var(--text-dim);
+    font-size: 14px;
+    padding: 40px 0;
+    line-height:1.6;
+  }
+
+  /* Kanban */
+  .kanban{
+    display:grid;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 16px;
+    align-items:start;
+  }
+  .kanban-col{
+    background: rgba(255,255,255,0.015);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 12px;
+    min-height: 140px;
+    transition: border-color .12s, background .12s;
+  }
+  .kanban-col.drag-over{
+    border-color: var(--violet);
+    background: rgba(124,108,240,0.06);
+  }
+  .kanban-col-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 4px 6px 12px 6px;
+  }
+  .kanban-col-title{
+    font-size: 12.5px; font-weight:600; letter-spacing:0.2px;
+  }
+  .kanban-col-count{
+    font-size: 11px; color: var(--text-dim);
+    background: var(--panel-2);
+    border-radius: 999px;
+    padding: 2px 8px;
+  }
+  .kanban-col[data-status="ideia"] .kanban-col-title{ color: var(--cyan); }
+  .kanban-col[data-status="andamento"] .kanban-col-title{ color: var(--accent); }
+  .kanban-col[data-status="travado"] .kanban-col-title{ color: var(--danger); }
+  .kanban-col[data-status="pronto"] .kanban-col-title{ color: var(--ok); }
+
+  .kanban-cards{ display:flex; flex-direction:column; gap:10px; min-height: 60px; }
+  .kanban-card{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px;
+    cursor: grab;
+    display:flex; flex-direction:column; gap:9px;
+    transition: border-color .12s, transform .1s, opacity .12s;
+  }
+  .kanban-card:hover{ border-color: var(--accent-dim); }
+  .kanban-card.dragging{ opacity: 0.35; }
+  .kanban-card-title{ font-size:13.5px; font-weight:600; line-height:1.35; }
+  .kanban-card .progress-track{ height:5px; }
+  .kanban-card .progress-label{ font-size:11px; }
+  .kanban-card .next-step{ font-size:11.5px; padding-top:8px; }
+
+  .kanban-empty{
+    font-size: 11.5px; color: #4A5164;
+    text-align:center; padding: 16px 4px;
+    border: 1px dashed var(--line);
+    border-radius: 10px;
+  }
+
+  .add-board-inline{
+    margin-top: 4px;
+    text-align:center;
+    font-size:12px;
+    color: var(--text-dim);
+    border: 1px dashed var(--line);
+    border-radius: 10px;
+    padding: 9px;
+    cursor:pointer;
+  }
+  .add-board-inline:hover{ border-color: var(--accent); color: var(--accent); }
+
+  @media (max-width: 980px){
+    .kanban{ grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px){
+    .kanban{ grid-template-columns: 1fr; }
+  }
+
+  /* Modal */
+  .overlay{
+    position:fixed; inset:0; background: rgba(5,6,10,0.72);
+    display:none; align-items:center; justify-content:center; z-index: 50;
+    backdrop-filter: blur(2px);
+  }
+  .overlay.show{ display:flex; }
+  .modal{
+    background: var(--panel);
+    border:1px solid var(--line);
+    border-radius: 16px;
+    padding: 26px;
+    width: 420px;
+    max-width: 92vw;
+    max-height: 86vh;
+    overflow-y:auto;
+    display:flex; flex-direction:column; gap:14px;
+  }
+  .modal h3{ font-size:16px; }
+  .field label{ display:block; font-size:12px; color:var(--text-dim); margin-bottom:6px; }
+  .field input[type=text], .field textarea, .field select{
+    width:100%; background: var(--bg); border:1px solid var(--line);
+    color: var(--text); padding: 10px 12px; border-radius: 9px; font-size:13.5px;
+    font-family:inherit;
+  }
+  .field textarea{ min-height: 70px; resize:vertical; }
+  .field input:focus, .field textarea:focus, .field select:focus{ outline:none; border-color: var(--violet); }
+  .range-row{ display:flex; align-items:center; gap:10px; }
+  .range-row input[type=range]{ flex:1; accent-color: var(--accent); }
+  .range-val{ font-size:13px; color: var(--accent); width: 38px; text-align:right; }
+
+  .modal-actions{ display:flex; justify-content:space-between; gap:10px; margin-top:6px; }
+  .btn{
+    padding: 10px 16px; border-radius: 9px; border:none; font-size:13.5px;
+    cursor:pointer; font-weight:600; font-family:inherit;
+  }
+  .btn-primary{ background: var(--accent); color: #1A1204; }
+  .btn-ghost{ background:transparent; color: var(--text-dim); border:1px solid var(--line); }
+  .btn-danger{ background: transparent; color: var(--danger); border:1px solid rgba(227,103,103,0.3); }
+  .btn:hover{ filter: brightness(1.08); }
+
+  ::-webkit-scrollbar{ width:8px; }
+  ::-webkit-scrollbar-thumb{ background: var(--line); border-radius:8px; }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="brand">Central <span>de Comando</span></div>
+  <div class="rooms" id="roomsList"></div>
+  <div class="add-room-btn" id="addRoomBtn">+ nova sala</div>
+  <div class="sidebar-footer">Seus dados ficam salvos automaticamente neste navegador.</div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <div class="crumbs" id="crumbs"></div>
+  </div>
+  <div class="subrooms" id="subroomsRow"></div>
+  <div id="boardArea"></div>
+</div>
+
+<!-- Modal genérico -->
+<div class="overlay" id="overlay">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<script>
+const STORAGE_KEY = 'central-comando-data';
+const hasCloudStorage = typeof window.storage !== 'undefined';
+const KANBAN_COLUMNS = ['ideia', 'andamento', 'travado', 'pronto'];
+
+function clamp(value, min, max){
+  return Math.min(Math.max(value, min), max);
+}
+
+function escapeHtml(str = ''){
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function normalizeBoard(board, fallbackStatus = 'ideia'){
+  const status = KANBAN_COLUMNS.includes(board?.status) ? board.status : fallbackStatus;
+  return {
+    id: board?.id || uid('board'),
+    title: String(board?.title || 'Novo quadro').trim() || 'Novo quadro',
+    status,
+    progress: clamp(Number(board?.progress) || 0, 0, 100),
+    next: String(board?.next || '').trim(),
+    notes: String(board?.notes || '').trim()
+  };
+}
+
+function normalizeSubroom(subroom){
+  return {
+    id: subroom?.id || uid('sub'),
+    name: String(subroom?.name || 'Nova sub-sala').trim() || 'Nova sub-sala',
+    boards: Array.isArray(subroom?.boards) ? subroom.boards.map(board => normalizeBoard(board, 'ideia')) : []
+  };
+}
+
+function normalizeRoom(room){
+  return {
+    id: room?.id || uid('room'),
+    name: String(room?.name || 'Nova sala').trim() || 'Nova sala',
+    icon: String(room?.icon || '📁').trim() || '📁',
+    subrooms: Array.isArray(room?.subrooms) ? room.subrooms.map(normalizeSubroom) : []
+  };
+}
+
+function normalizeData(raw){
+  const fallback = JSON.parse(JSON.stringify(seedData));
+  if(!raw || typeof raw !== 'object' || !Array.isArray(raw.rooms)) return fallback;
+
+  const rooms = raw.rooms.map(normalizeRoom).filter(Boolean);
+  if(!rooms.length) return fallback;
+
+  return { rooms };
+}
+
+async function storageGet(key){
+  if(hasCloudStorage) return window.storage.get(key, false);
+  const raw = localStorage.getItem(key);
+  if(raw === null) throw new Error('not found');
+  return { value: raw };
+}
+async function storageSet(key, value){
+  if(hasCloudStorage) return window.storage.set(key, value, false);
+  localStorage.setItem(key, value);
+  return { value };
+}
+
+const seedData = {
+  rooms: [
+    {
+      id: 'academico', name: 'Acadêmico', icon: '🎓',
+      subrooms: [
+        { id: 'relacional', name: 'Relacional', boards: [
+          { id: 'phi', title: 'Φ / DOR — Densidade de Organização Relacional', status: 'andamento', progress: 55, next: 'Revisão bibliográfica do Artigo 1, situando Φ frente às métricas espaciais/geométricas de rede já existentes.', notes: 'Trabalho considerado o principal da vida do autor. Repositório no GitHub. Plano: Artigo 1+2 consolidados (lacuna + proposta da métrica) e Artigo 3 (aplicações) separado para depois.' }
+        ]},
+        { id: 'livro', name: 'Livro', boards: [
+          { id: 'tear-construcao', title: 'Método T.E.A.R. — construção do conteúdo', status: 'andamento', progress: 40, next: 'Fazer um resumo do que já foi construído no método e no Livro 1; planejar o conteúdo do Livro 2 (Fundação e Legado).', notes: 'Livro 1 "O Despertar do Arquiteto" está pronto. Livro 2 aprofunda as sete Casas com sabedorias antigas e exemplos práticos — ainda não escrito.' }
+        ]}
+      ]
+    },
+    {
+      id: 'profissional', name: 'Profissional', icon: '💼',
+      subrooms: [
+        { id: 'comercial', name: 'Comercial', boards: [
+          { id: 'tear-divulgacao', title: 'Método T.E.A.R. — divulgação e mentoria', status: 'ideia', progress: 15, next: 'Criar e-book gratuito de captação e preparar postagens para o Instagram @metodo_tear.', notes: 'Funil: e-book gratuito → contato/grupo → venda do Livro 1 e da Mentoria T.E.A.R.' },
+          { id: 'wayne-venda', title: 'Wayne Industries — comercialização', status: 'ideia', progress: 10, next: 'Definir posicionamento comercial (foco em pequenos empresários/comércios) e trocar as credenciais de demonstração antes de qualquer publicação.', notes: 'Primeiro de uma futura linha de sistemas para pequenas empresas — objetivo é repetir esse modelo com outros produtos.' }
+        ]},
+        { id: 'desenvolvimento', name: 'Desenvolvimento', boards: [
+          { id: 'wayne-app', title: 'Wayne Industries — sistema/código', status: 'pronto', progress: 90, next: 'Adaptar o projeto de curso para versão comercial: trocar credenciais, revisar segurança, ajustar features para cliente real.', notes: 'Flask + SQLAlchemy + SQLite no backend, HTML/CSS/JS no frontend. Login, 3 níveis de permissão, cadastro/busca/filtro de recursos.' },
+          { id: 'agentes-ia', title: 'Agentes de IA', status: 'ideia', progress: 0, next: 'Definir qual será o primeiro agente a construir.', notes: '' }
+        ]}
+      ]
+    },
+    {
+      id: 'pessoal', name: 'Pessoal', icon: '🏠',
+      subrooms: [
+        { id: 'estudos', name: 'Estudos', boards: [
+          { id: 'dados', title: 'Análise e Ciência de Dados', status: 'andamento', progress: 20, next: '', notes: 'Estudo em paralelo ao desenvolvimento.' }
+        ]}
+      ]
+    }
+  ]
+};
+
+let data = null;
+let state = { roomId: null, subroomId: null };
+
+async function loadData(){
+  try{
+    const res = await storageGet(STORAGE_KEY);
+    const parsed = JSON.parse(res.value);
+    data = normalizeData(parsed);
+  }catch(e){
+    data = JSON.parse(JSON.stringify(seedData));
+    await saveData();
+  }
+
+  if(!data || !Array.isArray(data.rooms) || !data.rooms.length){
+    data = JSON.parse(JSON.stringify(seedData));
+  }
+
+  const firstRoom = data.rooms[0];
+  state.roomId = firstRoom?.id || null;
+  state.subroomId = firstRoom?.subrooms[0]?.id || null;
+  render();
+}
+
+async function saveData(){
+  try{
+    await storageSet(STORAGE_KEY, JSON.stringify(data));
+  }catch(e){ console.error('Falha ao salvar', e); }
+}
+
+function getRoom(id){ return data.rooms.find(r => r.id === id); }
+function getSubroom(room, id){ return room?.subrooms.find(s => s.id === id); }
+function uid(prefix){ return prefix + '-' + Math.random().toString(36).slice(2,9); }
+
+function statusLabel(s){
+  return { ideia:'Ideia', andamento:'Em andamento', travado:'Travado', pronto:'Pronto' }[s] || s;
+}
+
+function render(){
+  renderSidebar();
+  renderTop();
+}
+
+function renderSidebar(){
+  const el = document.getElementById('roomsList');
+  el.innerHTML = '';
+  data.rooms.forEach(room => {
+    const div = document.createElement('div');
+    div.className = 'room-btn' + (room.id === state.roomId ? ' active' : '');
+    div.innerHTML = `<span class="room-icon">${room.icon || '📁'}</span><span>${room.name}</span>`;
+    div.onclick = () => {
+      state.roomId = room.id;
+      state.subroomId = room.subrooms[0]?.id || null;
+      render();
+    };
+    el.appendChild(div);
+  });
+}
+
+document.getElementById('addRoomBtn').onclick = () => openRoomModal();
+
+function renderTop(){
+  const room = getRoom(state.roomId);
+  const crumbs = document.getElementById('crumbs');
+  crumbs.innerHTML = '';
+  if(room){
+    const c1 = document.createElement('div');
+    c1.className = 'crumb current';
+    c1.textContent = room.icon + ' ' + room.name;
+    crumbs.appendChild(c1);
+
+    const editRoom = document.createElement('div');
+    editRoom.className = 'crumb';
+    editRoom.textContent = '✎ editar sala';
+    editRoom.onclick = () => openRoomModal(room);
+    crumbs.appendChild(editRoom);
+  }
+
+  renderSubrooms(room);
+}
+
+function renderSubrooms(room){
+  const row = document.getElementById('subroomsRow');
+  row.innerHTML = '';
+  if(!room){ renderBoards(null); return; }
+
+  room.subrooms.forEach(sub => {
+    const tab = document.createElement('div');
+    tab.className = 'subroom-tab' + (sub.id === state.subroomId ? ' active' : '');
+    tab.textContent = sub.name;
+    tab.onclick = () => { state.subroomId = sub.id; render(); };
+    row.appendChild(tab);
+  });
+
+  const addTab = document.createElement('div');
+  addTab.className = 'add-sub-tab';
+  addTab.textContent = '+ sub-sala';
+  addTab.onclick = () => openSubroomModal(room);
+  row.appendChild(addTab);
+
+  renderBoards(room);
+}
+
+let dragState = { boardId: null };
+
+function renderBoards(room){
+  const area = document.getElementById('boardArea');
+  area.innerHTML = '';
+  if(!room){
+    area.innerHTML = '<div class="empty-state">Crie sua primeira sala para começar.</div>';
+    return;
+  }
+  const sub = getSubroom(room, state.subroomId);
+  if(!sub){
+    area.innerHTML = '<div class="empty-state">Crie uma sub-sala para organizar seus quadros aqui.</div>';
+    return;
+  }
+
+  const kanban = document.createElement('div');
+  kanban.className = 'kanban';
+
+  KANBAN_COLUMNS.forEach(statusKey => {
+    const boardsInCol = sub.boards.filter(b => b.status === statusKey);
+
+    const col = document.createElement('div');
+    col.className = 'kanban-col';
+    col.dataset.status = statusKey;
+
+    const head = document.createElement('div');
+    head.className = 'kanban-col-head';
+    head.innerHTML = `<span class="kanban-col-title">${statusLabel(statusKey)}</span><span class="kanban-col-count">${boardsInCol.length}</span>`;
+    col.appendChild(head);
+
+    const cardsWrap = document.createElement('div');
+    cardsWrap.className = 'kanban-cards';
+
+    if(boardsInCol.length === 0){
+      const empty = document.createElement('div');
+      empty.className = 'kanban-empty';
+      empty.textContent = 'Solte um quadro aqui';
+      cardsWrap.appendChild(empty);
+    }
+
+    boardsInCol.forEach(board => {
+      const card = document.createElement('div');
+      card.className = 'kanban-card';
+      card.draggable = true;
+      card.dataset.boardId = board.id;
+      card.innerHTML = `
+        <div class="kanban-card-title">${board.title}</div>
+        <div>
+          <div class="progress-track"><div class="progress-fill" style="width:${board.progress}%"></div></div>
+          <div class="progress-label">${board.progress}% construído</div>
+        </div>
+        ${board.next ? `<div class="next-step"><b>Próximo passo:</b> ${board.next}</div>` : ''}
+      `;
+      card.addEventListener('dragstart', (e) => {
+        dragState.boardId = board.id;
+        card.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      card.addEventListener('dragend', () => {
+        card.classList.remove('dragging');
+        dragState.boardId = null;
+      });
+      card.addEventListener('click', (e) => {
+        if(card.classList.contains('dragging')) return;
+        openBoardModal(room, sub, board);
+      });
+      cardsWrap.appendChild(card);
+    });
+
+    col.appendChild(cardsWrap);
+
+    const addInline = document.createElement('div');
+    addInline.className = 'add-board-inline';
+    addInline.textContent = '+ quadro';
+    addInline.onclick = () => openBoardModal(room, sub, null, statusKey);
+    col.appendChild(addInline);
+
+    col.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      col.classList.add('drag-over');
+    });
+    col.addEventListener('dragleave', () => col.classList.remove('drag-over'));
+    col.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      col.classList.remove('drag-over');
+      const boardId = dragState.boardId;
+      if(!boardId) return;
+      const board = sub.boards.find(b => b.id === boardId);
+      if(board && board.status !== statusKey){
+        board.status = statusKey;
+        await saveData();
+        render();
+      }
+    });
+
+    kanban.appendChild(col);
+  });
+
+  area.appendChild(kanban);
+}
+
+/* ---------- Modais ---------- */
+
+function openOverlay(){ document.getElementById('overlay').classList.add('show'); }
+function closeOverlay(){ document.getElementById('overlay').classList.remove('show'); }
+document.getElementById('overlay').addEventListener('click', (e) => {
+  if(e.target.id === 'overlay') closeOverlay();
+});
+
+function openRoomModal(room){
+  const modal = document.getElementById('modalContent');
+  modal.innerHTML = `
+    <h3>${room ? 'Editar sala' : 'Nova sala'}</h3>
+    <div class="field">
+      <label>Ícone (um emoji)</label>
+      <input type="text" id="roomIcon" maxlength="2" value="${escapeHtml(room ? room.icon : '📁')}">
+    </div>
+    <div class="field">
+      <label>Nome da sala</label>
+      <input type="text" id="roomName" value="${escapeHtml(room ? room.name : '')}" placeholder="ex: Financeiro">
+    </div>
+    <div class="modal-actions">
+      <div>${room ? '<button class="btn btn-danger" id="delRoom">Excluir sala</button>' : ''}</div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-ghost" id="cancelBtn">Cancelar</button>
+        <button class="btn btn-primary" id="saveRoom">Salvar</button>
+      </div>
+    </div>
+  `;
+  openOverlay();
+  document.getElementById('cancelBtn').onclick = closeOverlay;
+  document.getElementById('saveRoom').onclick = async () => {
+    const name = document.getElementById('roomName').value.trim();
+    const icon = document.getElementById('roomIcon').value.trim() || '📁';
+    if(!name) return;
+    if(room){ room.name = name; room.icon = icon; }
+    else {
+      const newRoom = { id: uid('room'), name, icon, subrooms: [] };
+      data.rooms.push(newRoom);
+      state.roomId = newRoom.id;
+    }
+    await saveData();
+    closeOverlay();
+    render();
+  };
+  if(room){
+    document.getElementById('delRoom').onclick = async () => {
+      if(!confirm('Excluir esta sala e tudo dentro dela?')) return;
+      data.rooms = data.rooms.filter(r => r.id !== room.id);
+      state.roomId = data.rooms[0]?.id || null;
+      state.subroomId = data.rooms[0]?.subrooms[0]?.id || null;
+      await saveData();
+      closeOverlay();
+      render();
+    };
+  }
+}
+
+function openSubroomModal(room, sub){
+  const modal = document.getElementById('modalContent');
+  modal.innerHTML = `
+    <h3>${sub ? 'Editar sub-sala' : 'Nova sub-sala'}</h3>
+    <div class="field">
+      <label>Nome da sub-sala</label>
+      <input type="text" id="subName" value="${escapeHtml(sub ? sub.name : '')}" placeholder="ex: Estudos">
+    </div>
+    <div class="modal-actions">
+      <div>${sub ? '<button class="btn btn-danger" id="delSub">Excluir</button>' : ''}</div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-ghost" id="cancelBtn">Cancelar</button>
+        <button class="btn btn-primary" id="saveSub">Salvar</button>
+      </div>
+    </div>
+  `;
+  openOverlay();
+  document.getElementById('cancelBtn').onclick = closeOverlay;
+  document.getElementById('saveSub').onclick = async () => {
+    const name = document.getElementById('subName').value.trim();
+    if(!name) return;
+    if(sub){ sub.name = name; }
+    else {
+      const newSub = { id: uid('sub'), name, boards: [] };
+      room.subrooms.push(newSub);
+      state.subroomId = newSub.id;
+    }
+    await saveData();
+    closeOverlay();
+    render();
+  };
+  if(sub){
+    document.getElementById('delSub').onclick = async () => {
+      if(!confirm('Excluir esta sub-sala e seus quadros?')) return;
+      room.subrooms = room.subrooms.filter(s => s.id !== sub.id);
+      state.subroomId = room.subrooms[0]?.id || null;
+      await saveData();
+      closeOverlay();
+      render();
+    };
+  }
+}
+
+function openBoardModal(room, sub, board, defaultStatus){
+  const modal = document.getElementById('modalContent');
+  const initialStatus = board ? board.status : (defaultStatus || 'ideia');
+  modal.innerHTML = `
+    <h3>${board ? 'Editar quadro' : 'Novo quadro'}</h3>
+    <div class="field">
+      <label>Título do projeto</label>
+      <input type="text" id="bTitle" value="${escapeHtml(board ? board.title : '')}" placeholder="Nome do projeto">
+    </div>
+    <div class="field">
+      <label>Status</label>
+      <select id="bStatus">
+        ${['ideia','andamento','travado','pronto'].map(s => `<option value="${s}" ${initialStatus===s ? 'selected':''}>${statusLabel(s)}</option>`).join('')}
+      </select>
+    </div>
+    <div class="field">
+      <label>Progresso</label>
+      <div class="range-row">
+        <input type="range" id="bProgress" min="0" max="100" value="${board ? board.progress : 0}">
+        <div class="range-val" id="progressVal">${board ? board.progress : 0}%</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Próximo passo</label>
+      <textarea id="bNext" placeholder="O que fazer na próxima vez que abrir isso">${escapeHtml(board ? board.next : '')}</textarea>
+    </div>
+    <div class="field">
+      <label>Anotações livres</label>
+      <textarea id="bNotes" placeholder="Ideias soltas, contexto, o que for">${escapeHtml(board ? board.notes : '')}</textarea>
+    </div>
+    <div class="modal-actions">
+      <div>${board ? '<button class="btn btn-danger" id="delBoard">Excluir</button>' : ''}</div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-ghost" id="cancelBtn">Cancelar</button>
+        <button class="btn btn-primary" id="saveBoard">Salvar</button>
+      </div>
+    </div>
+  `;
+  openOverlay();
+  document.getElementById('bProgress').oninput = (e) => {
+    document.getElementById('progressVal').textContent = e.target.value + '%';
+  };
+  document.getElementById('cancelBtn').onclick = closeOverlay;
+  document.getElementById('saveBoard').onclick = async () => {
+    const title = document.getElementById('bTitle').value.trim();
+    if(!title) return;
+    const payload = {
+      title,
+      status: document.getElementById('bStatus').value,
+      progress: parseInt(document.getElementById('bProgress').value, 10),
+      next: document.getElementById('bNext').value.trim(),
+      notes: document.getElementById('bNotes').value.trim()
+    };
+    if(board){ Object.assign(board, payload); }
+    else { sub.boards.push({ id: uid('board'), ...payload }); }
+    await saveData();
+    closeOverlay();
+    render();
+  };
+  if(board){
+    document.getElementById('delBoard').onclick = async () => {
+      if(!confirm('Excluir este quadro?')) return;
+      sub.boards = sub.boards.filter(b => b.id !== board.id);
+      await saveData();
+      closeOverlay();
+      render();
+    };
+  }
+}
+
+loadData();
+</script>
+</body>
+</html>

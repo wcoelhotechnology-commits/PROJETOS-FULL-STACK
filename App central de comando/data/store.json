@@ -1,0 +1,74 @@
+{
+  "rooms": [
+    {
+      "id": "academico",
+      "name": "Acadêmico",
+      "icon": "🎓",
+      "subrooms": [
+        {
+          "id": "relacional",
+          "name": "Relacional",
+          "boards": [
+            {
+              "id": "phi",
+              "title": "Φ / DOR — Densidade de Organização Relacional",
+              "status": "andamento",
+              "progress": 55,
+              "next": "Revisão bibliográfica do Artigo 1, situando Φ frente às métricas espaciais e geométricas já existentes.",
+              "notes": "Trabalho considerado central na linha de pesquisa do autor. Repositório e planejamento continuam em paralelo."
+            }
+          ]
+        },
+        {
+          "id": "livro",
+          "name": "Livro",
+          "boards": [
+            {
+              "id": "tear-construcao",
+              "title": "Método T.E.A.R. — construção do conteúdo",
+              "status": "andamento",
+              "progress": 40,
+              "next": "Fazer um resumo do que já foi construído no método e no Livro 1; planejar o conteúdo do Livro 2.",
+              "notes": "Livro 1 já está em boa forma. O segundo volume ainda está sendo estruturado com cuidado."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "profissional",
+      "name": "Profissional",
+      "icon": "💼",
+      "subrooms": [
+        {
+          "id": "comercial",
+          "name": "Comercial",
+          "boards": [
+            {
+              "id": "tear-divulgacao",
+              "title": "Método T.E.A.R. — divulgação e mentoria",
+              "status": "ideia",
+              "progress": 15,
+              "next": "Criar e-book gratuito e preparar as postagens iniciais para a rede social.",
+              "notes": "Estratégia de funil simples: e-book gratuito → grupo → venda do Livro 1 ou mentoria."
+            }
+          ]
+        },
+        {
+          "id": "desenvolvimento",
+          "name": "Desenvolvimento",
+          "boards": [
+            {
+              "id": "wayne-app",
+              "title": "Wayne Industries — sistema/código",
+              "status": "pronto",
+              "progress": 90,
+              "next": "Revisar segurança, credenciais e ajustes finais para versão comercial.",
+              "notes": "Plataforma construída com foco em pequenos negócios e operação interna."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
