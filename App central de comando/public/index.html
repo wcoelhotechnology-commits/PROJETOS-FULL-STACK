@@ -10,7 +10,26 @@
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <div class="app-shell">
+    <div id="snowfall" class="snowfall" aria-hidden="true"></div>
+    <section id="loginScreen" class="login-screen" aria-labelledby="loginTitle">
+      <div class="login-panel">
+        <div class="login-mark">CC</div>
+        <p class="eyebrow">Central de Comando</p>
+        <h1 id="loginTitle">Retome o fio dos seus projetos.</h1>
+        <p class="login-copy">
+          Entre com seu e-mail para acessar seu espaço de trabalho. Não há cadastro nem senha nesta versão.
+        </p>
+        <form id="loginForm" class="login-form">
+          <label for="loginEmail">Seu e-mail</label>
+          <input id="loginEmail" type="email" autocomplete="email" placeholder="voce@exemplo.com" required />
+          <p id="loginError" class="login-error" role="alert" hidden>Digite um e-mail válido para continuar.</p>
+          <button class="primary-btn" type="submit">Entrar no painel <span aria-hidden="true">→</span></button>
+        </form>
+        <p class="login-footnote">Desenvolvedor: Wellinghton Coelho</p>
+      </div>
+    </section>
+
+    <div id="appShell" class="app-shell" hidden>
       <aside class="sidebar">
         <div class="brand-block">
           <div class="brand">Central <span>de Comando</span></div>
@@ -25,6 +44,7 @@
 
         <div class="sidebar-footer">
           Dados salvos no navegador e sincronizados com o backend quando ele estiver disponível.
+          <button id="logoutBtn" class="logout-btn" type="button">Trocar e-mail</button>
         </div>
       </aside>
 

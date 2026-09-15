@@ -2,11 +2,85 @@
 // O objetivo é manter um visual profissional, mas sem perder a sensação de ferramenta pessoal.
 
 const STORAGE_KEY = 'central-comando-data';
+const USER_EMAIL_KEY = 'central-comando-user-email';
 const KANBAN_COLUMNS = ['ideia', 'andamento', 'travado', 'pronto'];
 
 let data = { rooms: [] };
 let state = { roomId: null, subroomId: null };
 let dragState = { boardId: null };
+
+function initializeSnowfall() {
+  const snowfall = document.getElementById('snowfall');
+  if (!snowfall || snowfall.children.length) return;
+
+  for (let index = 0; index < 48; index += 1) {
+    const flake = document.createElement('span');
+    flake.className = 'snowflake';
+    flake.style.setProperty('--snow-left', `${Math.random() * 100}%`);
+    flake.style.setProperty('--snow-size', `${2 + Math.random() * 4}px`);
+    flake.style.setProperty('--snow-opacity', `${0.35 + Math.random() * 0.55}`);
+    flake.style.setProperty('--snow-duration', `${12 + Math.random() * 18}s`);
+    flake.style.setProperty('--snow-delay', `${Math.random() * -24}s`);
+    flake.style.setProperty('--snow-drift', `${-70 + Math.random() * 140}px`);
+    snowfall.appendChild(flake);
+  }
+}
+
+function currentEmail() {
+  return localStorage.getItem(USER_EMAIL_KEY) || '';
+}
+
+function localDataKey() {
+  return `${STORAGE_KEY}:${currentEmail()}`;
+}
+
+function showLogin() {
+  document.getElementById('loginScreen').hidden = false;
+  document.getElementById('appShell').hidden = true;
+  document.getElementById('loginEmail').focus();
+}
+
+function showApp() {
+  document.getElementById('loginScreen').hidden = true;
+  document.getElementById('appShell').hidden = false;
+}
+
+function initializeAccess() {
+  initializeSnowfall();
+  const form = document.getElementById('loginForm');
+  const emailInput = document.getElementById('loginEmail');
+  const error = document.getElementById('loginError');
+  const savedEmail = localStorage.getItem(USER_EMAIL_KEY);
+
+  if (savedEmail) {
+    showApp();
+    loadData();
+  } else {
+    showLogin();
+  }
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const email = emailInput.value.trim().toLowerCase();
+
+    if (!emailInput.checkValidity()) {
+      error.hidden = false;
+      emailInput.focus();
+      return;
+    }
+
+    localStorage.setItem(USER_EMAIL_KEY, email);
+    await registerAccess(email);
+    error.hidden = true;
+    showApp();
+    loadData();
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem(USER_EMAIL_KEY);
+    showLogin();
+  });
+}
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
@@ -71,9 +145,14 @@ function normalizeData(payload) {
 }
 
 async function apiFetch(url, options = {}) {
+  const headers = {
+    'Content-Type': 'application/json',
+    'X-User-Email': currentEmail(),
+    ...(options.headers || {})
+  };
   const response = await fetch(url, {
-    headers: { 'Content-Type': 'application/json' },
-    ...options
+    ...options,
+    headers
   });
 
   if (!response.ok) {
@@ -89,13 +168,25 @@ async function apiFetch(url, options = {}) {
   return null;
 }
 
+async function registerAccess(email) {
+  try {
+    await apiFetch('/api/access', {
+      method: 'POST',
+      body: JSON.stringify({ email })
+    });
+  } catch (error) {
+    // O acesso continua disponível localmente se o backend estiver temporariamente fora do ar.
+    console.warn('Não foi possível registrar o e-mail no backend:', error);
+  }
+}
+
 async function loadData() {
   try {
     const response = await apiFetch('/api/data');
     data = normalizeData(response || { rooms: [] });
   } catch (error) {
     console.warn('Falha ao carregar do backend, usando fallback local:', error);
-    const local = localStorage.getItem(STORAGE_KEY);
+    const local = localStorage.getItem(localDataKey());
     if (local) {
       try {
         data = normalizeData(JSON.parse(local));
@@ -145,7 +236,7 @@ async function loadData() {
 
 async function saveData() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    localStorage.setItem(localDataKey(), JSON.stringify(data));
     try {
       await apiFetch('/api/data', { method: 'PUT', body: JSON.stringify(data) });
     } catch (backendError) {
@@ -556,7 +647,9 @@ async function exportData() {
   const payload = JSON.stringify(data, null, 2);
 
   try {
-    const response = await fetch('/api/export');
+    const response = await fetch('/api/export', {
+      headers: { 'X-User-Email': currentEmail() }
+    });
     if (!response.ok) throw new Error('Falha na exportação');
 
     const blob = await response.blob();
@@ -618,4 +711,4 @@ document.getElementById('importInput').addEventListener('change', (event) => {
   event.target.value = '';
 });
 
-loadData();
+initializeAccess();

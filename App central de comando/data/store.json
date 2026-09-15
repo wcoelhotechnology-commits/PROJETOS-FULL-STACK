@@ -8,16 +8,7 @@
         {
           "id": "relacional",
           "name": "Relacional",
-          "boards": [
-            {
-              "id": "phi",
-              "title": "Φ / DOR — Densidade de Organização Relacional",
-              "status": "andamento",
-              "progress": 55,
-              "next": "Revisão bibliográfica do Artigo 1, situando Φ frente às métricas espaciais e geométricas já existentes.",
-              "notes": "Trabalho considerado central na linha de pesquisa do autor. Repositório e planejamento continuam em paralelo."
-            }
-          ]
+          "boards": []
         },
         {
           "id": "livro",
@@ -34,16 +25,7 @@
         {
           "id": "comercial",
           "name": "Comercial",
-          "boards": [
-            {
-              "id": "tear-divulgacao",
-              "title": "Método T.E.A.R. — divulgação e mentoria",
-              "status": "ideia",
-              "progress": 15,
-              "next": "Criar e-book gratuito e preparar as postagens iniciais para a rede social.",
-              "notes": "Estratégia de funil simples: e-book gratuito → grupo → venda do Livro 1 ou mentoria."
-            }
-          ]
+          "boards": []
         },
         {
           "id": "desenvolvimento",
@@ -60,6 +42,12 @@
           ]
         }
       ]
+    },
+    {
+      "id": "room-3jyye42",
+      "name": "Pessoal",
+      "icon": "📁",
+      "subrooms": []
     }
   ]
 }
